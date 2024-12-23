@@ -1,20 +1,46 @@
 document.getElementById("explain_button").addEventListener("click", async function() {
-    // Get the current active tab
+    var canvas = await captureTab();
+
+    if (canvas) {
+        // convert canvas to base64 for claude api call
+        // note: next step is to simply make the claude api call, specifying 
+        // png image type and passing in this base64 string for the data param
+        const base64 = canvas.toDataURL();
+        console.log(base64);
+    }
+    else {
+        console.log("error getting canvas");
+    }
+});
+
+async function captureTab() {
+    // get current active tab
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     
-    // Take the screenshot
     try {
+        // take the screenshot
         const screenshot = await chrome.tabs.captureVisibleTab();
         
-        // Create an image element to display the screenshot
+        // create image element
         const img = document.createElement('img');
         img.src = screenshot;
         img.style.maxWidth = '100%';
-        
-        // Display the screenshot in the popup
-        document.getElementById("test").innerHTML = '';
-        document.getElementById("test").appendChild(img);
+
+        await new Promise((resolve) => {
+            img.onload = resolve;
+        });
+
+        // convert img element to canvas
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        context.drawImage(img, 0, 0);
+
+        // returns HTML canvas element
+        return canvas;
     } catch (err) {
-        document.getElementById("test").innerHTML = `<p>Error: ${err.message}</p>`;
+        console.log("Error in captureTab(): ", err);
     }
-});
+}
+
