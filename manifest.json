@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "To Be Named",
+    "version": "1.0",
+    "permissions": [
+        "activeTab",
+        "notifications",
+        "scripting"
+    ],
+    "action": {
+        "default_popup": "landing.html"
+    }
+}
