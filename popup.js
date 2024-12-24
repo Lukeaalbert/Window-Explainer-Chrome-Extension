@@ -1,5 +1,6 @@
-const claudePrompt = "Explain this image to me.";
+const claudePrompt = "You are an AI teacher and your job is to briefly and concisely explain the topic/content in the provided image. Avoid starting a response off with 'This image contains' and avoid longwinded explanations.";
 const ANTHROPIC_API_KEY = "add api key here";
+
 
 document.getElementById("explain_button").addEventListener("click", async function() {
     const loading = document.getElementById("loading");
@@ -17,16 +18,13 @@ document.getElementById("explain_button").addEventListener("click", async functi
         // remove the "data:image/png;base64," preface
         base64 = base64.replace("data:image/png;base64,", "");
 
-        // REMOVE ME
-        document.body.innerHTML += "<p>" + base64 + "<\p>";
-
         // Make the Claude API call with the image
         const ApiResponse = await makeClaudeCall(base64);
 
         loading.style.display = "none";
         loading.style.visibility = "hidden";
 
-        document.body.innerHTML += "<p>" + ApiResponse.content[0].text + "<\p>";
+        document.body.innerHTML += `<p id = "response_text"> ${ApiResponse.content[0].text} <\p>`;
 
     }
     else {
