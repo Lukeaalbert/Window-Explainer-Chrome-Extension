@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "To Be Named",
+    "name": "Browser Explain",
     "version": "1.0",
     "host_permissions": [
         "https://api.anthropic.com/*"

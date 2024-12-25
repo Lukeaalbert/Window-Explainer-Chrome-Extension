@@ -1,8 +1,23 @@
-const claudePrompt = "You are an AI teacher and your job is to briefly and concisely explain the topic/content in the provided image. Avoid starting a response off with 'This image contains' and avoid longwinded explanations.";
-const ANTHROPIC_API_KEY = "add api key here";
+const claudePrompt = `
+You are a teacher and your job is to briefly and concisely 
+teach and explain the topic/content in the provided image to a student.
+
+Please focus on explaining and teaching the specifics of the content in
+an image instead of discussing general/broad concepts that relate to the image.
+
+Format Rules:
+Return a response in HTML FORMAT ONLY.
+Do NOT include an intro such as 'the image shows' or 'here is a brief explanation'.
+Use only <p>, <ul>, <li>, <ol>, <strong>, <i> tags.
+NO headers.
+Do NOT refer to the image as 'this image' or 'the image'.
+Do NOT start with 'This contains' 'The image shows', or similar phrases.`;
+
+const ANTHROPIC_API_KEY = "api key";
 
 
 document.getElementById("explain_button").addEventListener("click", async function() {
+    document.getElementById("response_text").innerHTML = "";
     const loading = document.getElementById("loading");
     loading.style.display = "block";
     loading.style.visibility = "visible";
@@ -24,7 +39,12 @@ document.getElementById("explain_button").addEventListener("click", async functi
         loading.style.display = "none";
         loading.style.visibility = "hidden";
 
-        document.body.innerHTML += `<p id = "response_text"> ${ApiResponse.content[0].text} <\p>`;
+        response = ApiResponse.content[0].text;
+        document.getElementById("response_text").innerHTML = `${response}`;
+
+        requestAnimationFrame(() => {
+            document.getElementById("response_text").style.opacity = "1";
+        });
 
     }
     else {
