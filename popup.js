@@ -15,6 +15,20 @@ Do NOT start with 'This contains' 'The image shows', or similar phrases.`;
 
 const ANTHROPIC_API_KEY = "api key";
 
+// Function for extracting only HTML
+function extractHTML(rawResponse) {
+    // starting at the beginning of the HTML
+    const htmlStart = rawResponse.indexOf("<");
+    if (htmlStart !== -1) {
+        // if HTML is succesfully found, return everything after that first "<"
+        return rawResponse.substring(htmlStart).trim();
+    }
+    else {
+        // if HTML is not found, return full text with a warning.
+        console.warn("No valid HTML found, returning full text.");
+        return rawResponse;
+    }
+}
 
 document.getElementById("explain_button").addEventListener("click", async function() {
     document.getElementById("response_text").innerHTML = "";
@@ -40,6 +54,12 @@ document.getElementById("explain_button").addEventListener("click", async functi
         loading.style.visibility = "hidden";
 
         response = ApiResponse.content[0].text;
+        console.log("TESTING: HTML NOT EXTRACTED --> ", response);
+
+        // Extracting HTML
+        response = extractHTML(response);
+        console.log("TESTING: HTML EXTRACTED --> ", response);
+
         document.getElementById("response_text").innerHTML = `${response}`;
 
         requestAnimationFrame(() => {
