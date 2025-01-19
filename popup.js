@@ -15,6 +15,12 @@ Do NOT start with 'This contains' 'The image shows', or similar phrases.`;
 
 const ANTHROPIC_API_KEY = "api key";
 
+function displayErrorMessage(message) {
+    error = document.getElementById("error-message");
+    error.textContent = message;
+    error.style.display = "block";
+}
+
 // Function for extracting only HTML
 function extractHTML(rawResponse) {
     // starting at the beginning of the HTML
